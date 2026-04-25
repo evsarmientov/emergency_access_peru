@@ -15,7 +15,7 @@ PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def clean_ipress():
-    df = pd.read_excel(RAW_DIR / "TB_IPRESS.xlsx")
+    df = pd.read_csv(RAW_DIR / "ipress" / "IPRESS.csv", encoding="latin1")
     df = rename_columns(df)
 
     cols = ["codigo_unico", "nombre_del_establecimiento", "clasificacion",
@@ -36,8 +36,8 @@ def clean_ipress():
 
 def clean_emergencias():
     frames = []
-    for f in sorted(RAW_DIR.glob("Produccion*.csv")):
-        frames.append(pd.read_csv(f, encoding="latin1"))
+    for f in sorted(RAW_DIR.glob("emergencias/ConsultaC1_*.csv")):
+        frames.append(pd.read_csv(f, encoding="latin1", sep=";"))
     df = pd.concat(frames, ignore_index=True)
     df = rename_columns(df)
 
@@ -58,7 +58,7 @@ def clean_emergencias():
 
 
 def clean_centros_poblados():
-    path = next(RAW_DIR.glob("*entros*oblados*"))
+    path = next(RAW_DIR.glob("centros_poblados/*.shp"))
     gdf = gpd.read_file(path)
     gdf = rename_columns(gdf)
 
@@ -77,7 +77,7 @@ def clean_centros_poblados():
 
 
 def clean_distritos():
-    path = next(RAW_DIR.glob("*ISTRITO*"))
+    path = next(RAW_DIR.glob("distritos/*.shp"))
     gdf = gpd.read_file(path)
     gdf = rename_columns(gdf)
 
